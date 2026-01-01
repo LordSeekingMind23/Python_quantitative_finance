@@ -1,5 +1,7 @@
 import pandas as pd
-
+#i took datas from kaggle:
+#https://www.kaggle.com/datasets/mczielinski/bitcoin-historical-data/data
+#you can use them to practice pandas because you will need to change the date, format, clear missing values, duplicates.
 
 #je prend les datas
 df= pd.read_csv(r"C:\User\"OwnPath", on_bad_lines="skip", sep=";")
