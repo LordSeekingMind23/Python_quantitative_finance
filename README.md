@@ -2,6 +2,9 @@ Hello guys,
 
 If any of you are here, welcome!
 
+I am passionate about trading especially on commodities ( gas and power). I am french which means it happens that some instructions are in french (sorry^^). 
+Here, i am trying to put here my projects that are meant for trading (market analysis, trend, forecast...)
+
 I am not a professional of python, just someone who is trying to learn as much as possible by doing it. I have some experiences but i am trying to help (if possible) people that are struggling to code. 
 I am here to provide examples, or ways to prepare for "finance coding" so the topics will be around librairies such as pandas, numpy, seaborn, sklearn, and many else...
 
