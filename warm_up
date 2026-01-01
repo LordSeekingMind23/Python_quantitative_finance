@@ -1,0 +1,33 @@
+import pandas as pd
+
+
+#je prend les datas
+df= pd.read_csv(r"C:\User\"OwnPath", on_bad_lines="skip", sep=";")
+
+#cleaning dates
+df["Timestamp"]=pd.to_datetime(df["Timestamp"], unit="s")
+df=df.sort_values("Timestamp").set_index("Timestamp")
+
+#j'enleve les doublons
+df=df.drop_duplicates(subset=["Open","High", "Low","Close"], keep="first")
+
+df=df.dropna()#j'enleve les lignes avec des valeurs manquantes
+perc_na=df.isna().mean()*100#je calcule le pourcentage de valeurs manquantes par colonne
+
+#je convertis les colonnes numeriques
+num_cols=["Timestamp","Open","High", "Low","Close"]#je creé une liste des colonnes numeriques
+for c in num_cols:#pour toutes les colonnes dans num_cols
+    if c in df.columns:#si c est une colonne du df alors:
+        df[c]=pd.to_numeric(df[c], errors="coerce")
+
+#nb de lignes
+length_df= len(df)
+
+
+#fichier remis en csv
+#df.to_csv("btc_cleaned.csv", sep=";", index=True)
+
+print(df.describe())
+print(df.count())
+print(df.shape)
+print(df.head())
