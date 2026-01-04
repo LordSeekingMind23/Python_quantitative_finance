@@ -1,0 +1,51 @@
+#Here is a small project to get a hand on a quant. You will be able to compare 2 assets. You can also have your own data to compare multiple assets
+#I used OOP because you will have to know how to code in OOP. 
+
+import pandas as pd 
+import numpy as np
+import matplotlib.pyplot as plt
+
+class Asset: 
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+
+    def returns(self):
+        return self.price.pct_change()#get the return
+    
+
+    def volatility(self):
+        return self.returns().std()*np.sqrt(252)#get the vol
+
+
+
+
+dates=pd.date_range(start='2019-01-01', end=' 2025-12-31', freq='B')#days
+
+returns_1=np.random.normal(0,0.01,len(dates))#get the price simulation
+prices_1=100*np.exp(np.cumsum(returns_1))#convert to price
+prices_1=pd.Series(prices_1, index=dates)#make it a series
+
+
+returns_2=np.random.normal(0,0.01,len(dates))#same as asset 1
+prices_2=100*np.exp(np.cumsum(returns_2))
+prices_2=pd.Series(prices_2, index=dates)
+
+
+asset=Asset("AAPL", prices_1)#create asset object
+asset_2=Asset("MSFT", prices_2)
+
+print("AAPL Volatility:", asset.volatility())   #show volatility
+print("MSFT Volatility:", asset_2.volatility())   
+
+
+plt.figure(figsize=(10,5))#plot the prices
+plt.plot(prices_1.index, prices_1.values)
+plt.plot(prices_2.index, prices_2.values)
+
+plt.legend(["AAPL", "MSFT"])
+plt.title("Asset Price Comparison")
+plt.xlabel("Date")
+plt.ylabel("Price")
+plt.grid(True)
+plt.show()
