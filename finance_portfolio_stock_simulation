@@ -1,0 +1,52 @@
+#you will need to take ticker randomly and then get the return, mean, volatility and plot them
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+#parameters
+tickers = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA',"META","NVDA","JPM","V","UNH"]
+dates = pd.date_range(start='2020-01-01', end='2024-12-31', freq='B')
+
+#simulate stock prices
+prices = pd.DataFrame(index=dates, columns=tickers)
+
+for t in tickers:
+    returns = np.random.normal(loc=0, scale=0.01, size=len(dates))  # daily shocks
+    prices[t] = 100 * np.exp(np.cumsum(returns))  # log-normal price process
+
+#returns calculation
+returns = prices.pct_change()
+cumulative_returns = (1 + returns).cumprod() - 1
+
+#mean and volatility
+stats = pd.DataFrame({
+    "mean_return": returns.mean(),
+    "volatility": returns.std()
+})
+
+#___print___
+print(prices.head())
+print(stats)
+
+#___plot___
+plt.figure(figsize=(17,6))
+for t in tickers:
+    plt.plot(prices.index, prices[t], label=t)
+plt.title("Simulated Stock Prices (2020–2024)")
+plt.xlabel("Date")
+plt.ylabel("Price")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+#___plot returns___
+plt.figure(figsize=(17,6))
+for t in tickers:
+    plt.plot(returns.index, returns[t], label=t)
+plt.title("Daily Returns (2020–2024)")
+plt.xlabel("Date")
+plt.ylabel("Return")
+plt.legend()
+plt.grid(True)
+plt.show()
