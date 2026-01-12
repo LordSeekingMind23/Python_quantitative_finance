@@ -1,0 +1,56 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+class Portfolio: 
+    def __init__(self, assets, weights):
+        self.assets = assets
+        self.weights = np.array(weights)
+
+    def returns(self):   
+        return self.assets.pct_change()
+    
+    def weighted_returns(self):
+        return self.returns().mul(self.weights, axis=1).sum(axis=1)
+
+    def vol(self):
+        return self.returns().std()*np.sqrt(252)
+
+    def correl(self):
+        return self.returns().corr()
+    
+
+    def plot(self):
+        cum_returns = (1 + self.weighted_returns()).cumprod() - 1
+        plt.figure(figsize=(10, 6))
+        plt.plot(cum_returns)
+        plt.title('Portfolio cumulative returns over time')
+        plt.grid(True)
+        plt.xlabel('Date')
+        plt.ylabel('Cumulative Return')
+        plt.show()
+
+date=pd.date_range(start='2020-01-01', end='2025-12-31', freq='B')
+
+ret_1= np.random.normal(0.0002, 0.01, len(date))
+ret_2= np.random.normal(0.0003, 0.015, len(date))
+ret_3= np.random.normal(0.0001, 0.008, len(date))
+
+
+price_1=100*np.exp(np.cumsum(ret_1))
+price_2=50*np.exp(np.cumsum(ret_2))
+price_3=200*np.exp(np.cumsum(ret_3))
+
+assets= pd.DataFrame({
+    'Asset 1': price_1, 
+    'Asset 2': price_2, 
+    'Asset 3': price_3}, 
+    index=date)
+
+weights=[0.3, 0.5, 0.2]
+
+portfolio= Portfolio(assets, weights)
+print("Portfolio Volatility:\n", portfolio.vol())
+print("Portfolio Correlation Matrix:\n", portfolio.correl())
+portfolio.plot()
